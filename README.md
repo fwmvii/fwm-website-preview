@@ -3,6 +3,13 @@
 The new FWM Software marketing site: a small, dependency-free static build
 (hand-written HTML + one stylesheet) in the Harbor & Coral design system.
 
+**Lien Writer is a web application.** The desktop program is no longer sold
+(Franklin, 2026-08-03). This site markets the hosted product only; the version
+names (Lite / Single-State / Tri-State / Multi-State / Pro) are web
+subscription tiers, enforced server-side — see `docs/tier-entitlements.md` in
+the app repo. `downloads.html` survives purely as a reinstall archive for
+existing desktop licence holders and retires with the legacy site.
+
 **Not live yet.** fwmsoftware.com still serves the legacy site from
 [`fwmsoftware-website`](https://github.com/FWM-Software/fwmsoftware-website)
 (an Express app, last touched Aug 2024). This repo replaces it at launch.
@@ -29,6 +36,8 @@ from 2018 to 2026.
 | `lien-writer-pro/`, `multi-state/`, `tri-state/`, `single-state/`, `lite-version/` | Per-version pages at the **legacy URLs**, one `index.html` each |
 | `styles.css` | The whole design system: tokens, type scale, components |
 | `robots.txt` | Blocks indexing **while this is a preview** — remove at launch |
+| `_redirects` | Cloudflare Pages 301 map, legacy URL → new URL (Pages only; GitHub Pages ignores it) |
+| `_headers` | Cloudflare Pages response headers — CSP, nosniff, frame-ancestors, asset caching |
 
 No build step, no dependencies, no framework. Open `index.html` in a browser.
 
@@ -87,8 +96,10 @@ Outstanding:
 - [ ] **Real privacy + terms text** — generated and hosted by Termly (decision,
       2026-07-30), reconciled against the WP build's wording. Blocks Stripe
       live verification. Ticket #323, audit D4.
-- [ ] **301 redirect map**, old URL → new URL, for everything that moved. The
-      audit's page-by-page table is the input. Blocked on D6.
+- [x] **301 redirect map** — `_redirects`. Every legacy URL in audit §1 resolves
+      to a live target; the five per-version paths need no redirect because this
+      build serves them unchanged. `/property-research/` points at home as a
+      placeholder — **still needs a real destination decision**.
 - [ ] **About page** — both other sites have a substantial feature narrative
       (Pettit form compatibility, USPS certified-mail Firm Log, the Tracker,
       Outlook calendar, scalability) that this build has no home for.
@@ -97,15 +108,19 @@ Outstanding:
 - [ ] **Self-serve scheduling** — the legacy contact page offers a Calendly
       link and a Google Form; this build offers a `mailto:` handoff, which
       fails silently on machines with no mail client configured.
-- [ ] **Decide whether the marketing copy may promise mechanics liens and stop
-      notices** for the *web app* — it has no mechanics-lien generator today
-      (`docs/tier-entitlements.md`) and the live catalog is a CA-only Lite
-      product. The per-version pages sidestep this by describing the desktop
-      program; the home page feature grid does not. Audit D5.
-- [ ] **Canadian coverage number.** Legacy and WP both say "11 Canadian
-      Provinces" (not a valid count — Canada has 10 provinces + 3
-      territories); this build says 13. Left alone pending the actual form
-      inventory. Audit D3.
+- [x] **Mechanics-lien claim scoped honestly (audit D5).** The home page feature
+      grid now carries "Mechanics liens — Rolling out" rather than presenting a
+      generator that does not exist, and stop notices (which *do* generate) got
+      their own tile. The per-version pages no longer defer to the desktop
+      program. **Open:** `docs/tier-entitlements.md` says the full Stripe
+      catalog "isn't built yet" and current subscribers are all on one
+      CA-only Lite product — the site now markets five tiers, so Long needs to
+      set `metadata.tier` on the catalog products before launch or the pages
+      describe something unpurchasable.
+- [x] **Canadian coverage number removed rather than guessed (audit D3).** The
+      compliance block's "13" tile is now "35 years of maintained forms"; prose
+      says "the Canadian provinces and territories" with no count. The real
+      number still needs the form inventory before any count is published.
 - [ ] Remove the `robots.txt` disallow and the preview banner; submit a sitemap.
 - [ ] Verify fwmsoftware.com in Search Console *before* the DNS switch.
 - [ ] Keyword research → copy/title/meta pass (ticket #318).
@@ -163,3 +178,41 @@ parcel data directly — greenfield work, and its own scoping exercise.
 
 Legacy URL `/property-research/` still needs a 301 destination in the redirect
 map; it currently has purchase intent behind it and no page to land on.
+
+## Web-only: what changed 2026-08-03
+
+Decision (Franklin): **only the web application is offered.** The desktop
+program is not sold; `downloads.html` is a reinstall archive that retires with
+the legacy site. Full catalog on the new site — all five tiers.
+
+Rewritten accordingly:
+
+- **Home page rebuilt**, 586 → 1,172 words. It was the thinnest page on the
+  site; the five per-version pages carried 2,246 words between them, so the
+  positioning document weighed less than a tier detail page. Added the tier
+  catalog and a "why it belongs in the browser" section (no install, forms never
+  stale, real backups, multi-user, migration path, same people answering).
+- **"Desktop and web" callout removed from all five version pages.** Five
+  identical apologetic caveats explaining that version names described *desktop*
+  licensing was the clearest symptom of the old framing.
+- **Mechanics liens tagged "Rolling out"** instead of claimed outright, and stop
+  notices split into their own tile — they generate, mechanics liens do not.
+- **Hero and compliance copy** now lead with the browser: nothing to install,
+  statutory changes reach customers the day we ship.
+
+Still desktop-framed on purpose: `downloads.html`, and the home page's
+"Moving from the desktop program?" tile — both are migration surface, not
+product marketing.
+
+## Cloudflare Pages
+
+Deploy method: **Pages + Git integration** (Franklin, 2026-08-03). Connect
+`FWM-Software/website` in the Cloudflare dashboard — no build command, output
+directory `/`, production branch `main`. `_redirects` and `_headers` are picked
+up automatically.
+
+**Do not point fwmsoftware.com DNS at it yet.** `privacy.html` and `terms.html`
+are still placeholders, which blocks Stripe live verification, and
+`fwmsoftware.operp.net` is still indexable. `robots.txt` and the per-page
+`noindex` stay until both are resolved — so the first Pages deploy is safe to
+make public at its `*.pages.dev` address without competing with the live site.

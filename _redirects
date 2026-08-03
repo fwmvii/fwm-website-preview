@@ -1,0 +1,27 @@
+# Cloudflare Pages 301 map — legacy fwmsoftware.com URLs → this build.
+# Audit #316 §1 is the input. Cloudflare Pages only; GitHub Pages ignores this file.
+#
+# NOT redirected, because these paths exist unchanged in this build:
+#   /lien-writer-pro/  /multi-state/  /tri-state/  /single-state/  /lite-version/
+
+# --- Marketing / about ---
+/versions/                        /versions.html            301
+/about-lien-writing-software/     /                         301
+/overview/                        /                         301
+
+# --- Retired desktop-only products (web-only decision, 2026-08-03) ---
+/citrix-server/                   /versions.html            301
+/unit-usage/                      /lite-version/            301
+/lien-releaser/                   /versions.html            301
+/chexwriter/                      /downloads.html           301
+
+# --- Transactional / support ---
+/contact-us/                      /contact.html             301
+/customer-center/                 /downloads.html           301
+/fwm-software-downloads/          /downloads.html           301
+/lien-writer-help/                https://www.lienwriterhelp.com/  301
+
+# --- Retired offer (see README: Property Research) ---
+# DECISION NEEDED: this URL carries purchase intent and has no page to land on.
+# Pointing at home for now so it is never a 404.
+/property-research/               /                         301
