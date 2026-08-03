@@ -23,7 +23,6 @@ from 2018 to 2026.
 | --- | --- |
 | `index.html` | Home — positioning, product surface, the Tracker, testimonials, compliance |
 | `versions.html` | Lite / Single-State / Tri-State / Multi-State / Pro / Lien Releaser |
-| `property-research.html` | The paid Property Research service — owner, address, APN. $12/report, $10 at 5+ |
 | `downloads.html` | Desktop installers for existing customers |
 | `contact.html` | Demo request + contact details + phone hours |
 | `privacy.html`, `terms.html` | Placeholders pointing at the policies in force; real text via Termly (#323) |
@@ -62,11 +61,8 @@ build is ticket **#316**; its output lives in Drive at
 
 Done:
 
-- [x] **Property Research page.** `$12.00`/report, `$10.00` each at five or
-      more, open to non-customers. Present on both the legacy site and the WP
-      build, absent from this one — live revenue we were hiding. Linked from
-      the home page, the main nav, and the footer. *Pricing still needs
-      confirming (audit D1).*
+- [x] **Property Research page — added, then removed.** See "Property
+      Research: removed, to return" below. Do not re-add it from the audit.
 - [x] **Per-version pages at the legacy URLs** — five of eight:
       `/lien-writer-pro/`, `/multi-state/`, `/tri-state/`, `/single-state/`,
       `/lite-version/`, as `<dir>/index.html`. Scope is described in
@@ -125,3 +121,45 @@ Outstanding:
   worth asking her for a refreshed quote rather than editing her words.
 - The X/Twitter link is a personal handle (`@Fmoore0001`) — confirm before
   promoting it as the company account.
+
+## Property Research: removed, to return
+
+Removed from this build on **2026-08-03** on Franklin's instruction: **FWM does
+not currently offer property research reports.**
+
+The #316 audit called its absence a P0 gap and shipped a page with `$12.00`/report
+pricing and an order path, reasoning that the service was live revenue being
+hidden because it appears on both older sites. That reasoning was wrong. It was
+inferred from the legacy and WordPress sites rather than confirmed — audit
+question **D1** asked exactly this and shipped unanswered. Treat it as a lesson
+about the audit's method, not just a bad page: a page inferred from a competitor
+or a predecessor site is not a confirmed offer.
+
+What was removed: `property-research.html`, its main-nav link, its footer link on
+every page, the home page's "Not sure who owns the job site?" section, and the
+contact page's "Property research" row.
+
+**Still live elsewhere and still orderable** as of 2026-08-03 — both need to come
+down separately, neither is in this repo:
+
+- `https://www.fwmsoftware.com/property-research/` (legacy Express app)
+- `https://fwmsoftware.operp.net/property-research/` (Oscar's WP build)
+
+### If it comes back
+
+The intended shape is a free tier over public data plus a paid report when
+deeper research is needed. Note for whoever builds it:
+
+**The FoxPro program never sourced this data.** Every APN reference in
+`lienwriter-foxpro` prints an APN the *user typed into the job record* onto a
+notice or lien form — field 19, originally 16 characters, later widened to 64.
+The legacy help text tells the user to go find it themselves, and treats it as
+optional: "APN… If you have the Street address this number is not needed. But in
+some cases such as new developments this is the only number you have." The $12
+service was staff doing county assessor lookups by hand.
+
+So there is nothing to port. A free tier means integrating county assessor and
+parcel data directly — greenfield work, and its own scoping exercise.
+
+Legacy URL `/property-research/` still needs a 301 destination in the redirect
+map; it currently has purchase intent behind it and no page to land on.
