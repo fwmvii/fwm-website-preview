@@ -1,4 +1,10 @@
 # Cloudflare Pages response headers.
+#
+# app.termly.io is allowed in script-src/frame-src/connect-src for exactly one
+# reason: privacy.html, cookies.html and terms.html embed our Termly-hosted
+# legal documents so the text has one home and cannot drift. It is the only
+# third-party script on the site. If the legal pages ever stop embedding,
+# take these three allowances back out.
 # HSTS is deliberately NOT set here: fwmsoftware.com has sibling subdomains
 # (assets., news.) and includeSubDomains could break installer downloads.
 # Turn HSTS on in the Cloudflare dashboard once every subdomain is HTTPS-only.
@@ -8,7 +14,7 @@
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=()
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; form-action 'self'; connect-src 'self'
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://app.termly.io; frame-src https://app.termly.io; form-action 'self'; connect-src 'self' https://app.termly.io
 
 /styles.css
   Cache-Control: public, max-age=31536000, immutable

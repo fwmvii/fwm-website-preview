@@ -32,7 +32,7 @@ from 2018 to 2026.
 | `versions.html` | Lite / Single-State / Tri-State / Multi-State / Pro / Lien Releaser |
 | `downloads.html` | Desktop installers for existing customers |
 | `contact.html` | Demo request + contact details + phone hours |
-| `privacy.html`, `terms.html` | Placeholders pointing at the policies in force; real text via Termly (#323) |
+| `privacy.html`, `cookies.html`, `terms.html` | Termly-hosted legal documents, embedded (see "Legal documents" below) |
 | `lien-writer-pro/`, `multi-state/`, `tri-state/`, `single-state/`, `lite-version/` | Per-version pages at the **legacy URLs**, one `index.html` each |
 | `styles.css` | The whole design system: tokens, type scale, components |
 | `robots.txt` | Blocks indexing **while this is a preview** — remove at launch |
@@ -79,9 +79,8 @@ Done:
 - [x] **Downloads page.** Points at the same `assets.fwmsoftware.com`
       installers the legacy page serves, so nothing breaks when that site
       retires.
-- [x] **Privacy + terms URLs exist** as honest placeholders that link to the
-      policies actually in force and say the update is coming. No invented
-      legal text.
+- [x] **Privacy, cookie, and terms pages are real** — the three Termly
+      documents, embedded on our own URLs. See "Legal documents" below.
 - [x] **Support hours published** site-wide (footer) and on the contact page:
       9–11 am and 2–5 pm PST. *Which hours are real still needs confirming —
       the legacy site says 8–5 (audit D2).*
@@ -93,9 +92,10 @@ Outstanding:
 - [ ] **Remaining three legacy product URLs** — `/unit-usage/`,
       `/citrix-server/`, `/lien-releaser/`. Blocked on the retire-or-keep
       decision (audit D6); `/chexwriter/` is in the same bucket.
-- [ ] **Real privacy + terms text** — generated and hosted by Termly (decision,
-      2026-07-30), reconciled against the WP build's wording. Blocks Stripe
-      live verification. Ticket #323, audit D4.
+- [ ] **Attorney read of two clauses** before these documents are relied on:
+      the industry-specific compliance clause (the not-a-law-firm / no-warranty
+      -that-a-document-perfects-a-lien language) and the custom
+      customer-data/export/migration clauses. Danielle. Ticket #323, audit D4.
 - [x] **301 redirect map** — `_redirects`. Every legacy URL in audit §1 resolves
       to a live target; the five per-version paths need no redirect because this
       build serves them unchanged. `/property-research/` points at home as a
@@ -211,8 +211,43 @@ Deploy method: **Pages + Git integration** (Franklin, 2026-08-03). Connect
 directory `/`, production branch `main`. `_redirects` and `_headers` are picked
 up automatically.
 
-**Do not point fwmsoftware.com DNS at it yet.** `privacy.html` and `terms.html`
-are still placeholders, which blocks Stripe live verification, and
-`fwmsoftware.operp.net` is still indexable. `robots.txt` and the per-page
-`noindex` stay until both are resolved — so the first Pages deploy is safe to
-make public at its `*.pages.dev` address without competing with the live site.
+**Do not point fwmsoftware.com DNS at it yet.** `fwmsoftware.operp.net` is
+still indexable, so `robots.txt` and the per-page `noindex` stay until that is
+resolved — the first Pages deploy is safe to make public at its `*.pages.dev`
+address without competing with the live site.
+
+## Legal documents
+
+`privacy.html`, `cookies.html` and `terms.html` are thin wrappers around
+documents that live with **Termly**, embedded via Termly's `embed-policy.min.js`
+snippet with the policy UUID in `data-id`:
+
+| Page | Termly policy UUID |
+| --- | --- |
+| `privacy.html` | `a763f257-50fe-4db6-9d3b-6227de47f232` |
+| `cookies.html` | `5aa3544d-4f5d-4b71-b18f-a898c1949ab6` |
+| `terms.html` | `67f2991c-abfc-4042-8968-21e446254c15` |
+
+Two rules follow from that, and breaking either causes the failure this design
+exists to prevent:
+
+1. **Never paste the policy text into these files.** Edits made in Termly
+   propagate to the embed automatically; a pasted copy silently becomes a
+   second, differently-worded version of the same document.
+2. **The embed is the only third-party script on the site**, which is why
+   `_headers` allows `app.termly.io` in `script-src`, `frame-src` and
+   `connect-src`. If the embed ever goes away, take those allowances back out.
+
+Each page also carries a direct link to Termly's hosted viewer, for anyone
+whose browser blocks the frame, and a `<noscript>` version of the same.
+
+Content written by us rather than Termly: the trademark notice at the bottom of
+`terms.html` (carried over from the legacy site's mis-titled "Terms of Use"
+page, which was really a trademark statement of use) and the short callouts on
+the privacy and cookie pages.
+
+Not yet in place: **a cookie consent banner.** Termly sells one, and it is a
+separate script. The site currently sets no advertising or analytics cookies —
+the only third-party request is Google Fonts — so a banner is not yet doing any
+work. It becomes required the moment analytics or ad pixels are added, which
+is likely as soon as SEO work starts (#318).

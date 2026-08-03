@@ -15,6 +15,14 @@
 /lien-releaser/                   /versions.html            301
 /chexwriter/                      /downloads.html           301
 
+# --- Legal (Termly-hosted documents, embedded on our own pages) ---
+# The legacy site's "Terms of Use" was actually the trademark statement of
+# use, which now lives as a section at the bottom of terms.html.
+/privacy-policy/                  /privacy.html             301
+/cookie-policy/                   /cookies.html             301
+/terms-and-conditions/            /terms.html               301
+/terms-of-use/                    /terms.html               301
+
 # --- Transactional / support ---
 /contact-us/                      /contact.html             301
 /customer-center/                 /downloads.html           301
